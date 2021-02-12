@@ -1,4 +1,4 @@
-const { ApoolloServer, gql } = require('apollo-server');
+const { ApoolloServer, gql, ApolloServer } = require('apollo-server');
 
 const typeDefs = gql`
   type Album {
@@ -17,7 +17,7 @@ const typeDefs = gql`
     duration: Int!
     lyrics: [String]
     trackNumber: Int
-    feature: String[]
+    feature: [String]
     appearsIn: [Album]
   }  
   type Performer {
@@ -126,10 +126,16 @@ const shows = [
     locationAddress: '472 Broadway, Denver, CO 80203',
     cityState: 'Denver, CO',
   }
-]
+];
 
 const resolvers = {
   Query: {
-    books: () => books,
+    shows: () => shows,
   }
-}
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
+
+server.listen().then(({ url }) => {
+  console.log(`🤘 Server ready at ${ url }`)
+});
